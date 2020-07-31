@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PageDefault from '../../../components/PageDefault';
 import FormField from '../../../components/FormField';
 import Button from '../../../components/Button';
@@ -27,6 +27,20 @@ function CadastroCategoria() {
       event.target.value,
     );
   }
+
+  useEffect(() => {
+    const API = 'http://localhost:5000/categorias';
+
+    async function requestAPI() {
+      const apiResult = await fetch(API);
+      const result = await apiResult.json();
+      setCategorias([
+        ...result,
+      ]);
+    }
+
+    requestAPI();
+  }, []);
 
   return (
     <PageDefault>
@@ -71,6 +85,12 @@ function CadastroCategoria() {
           Cadastrar
         </Button>
       </form>
+
+      {categorias.length === 0 && (
+        <div>
+          Carregando...
+        </div>
+      )}
 
       <ul>
         {categorias.map((categoria) => (
